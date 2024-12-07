@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Go Webstore</title>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard - Go Webstore</h1>
+        <nav>
+            <a href="/store">Store</a>
+            <a href="/dbQueries">Database Queries</a>
+            <a href="/admin" style="float: right; font-weight: bold;">Admin</a>
+        </nav>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Customers</h2>
+            {{ if .Customers }}
+                <table border="1">
+                    <tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th></tr>
+                    {{ range .Customers }}
+                    <tr>
+                        <td>{{ .ID }}</td>
+                        <td>{{ .FirstName }}</td>
+                        <td>{{ .LastName }}</td>
+                        <td>{{ .Email }}</td>
+                    </tr>
+                    {{ end }}
+                </table>
+            {{ else }}
+                <p>No customers found.</p>
+            {{ end }}
+        </section>
+
+        <section>
+            <h2>Orders</h2>
+            {{ if .Orders }}
+                <table border="1">
+                    <tr><th>Order ID</th><th>Customer Name</th><th>Product Name</th><th>Quantity</th><th>Price</th><th>Tax</th><th>Donation</th><th>Total</th><th>Order Date</th></tr>
+                    {{ range .Orders }}
+                    <tr>
+                        <td>{{ .ID }}</td>
+                        <td>{{ .CustomerFirstName }} {{ .CustomerLastName }}</td>
+                        <td>{{ .ProductName }}</td>
+                        <td>{{ .Quantity }}</td>
+                        <td>{{ printf "%.2f" .Price }}</td>
+                        <td>{{ printf "%.2f" .Tax }}</td>
+                        <td>{{ printf "%.2f" .Donation }}</td>
+                        <td>{{ printf "%.2f" .Total }}</td>
+                        <td>{{ .OrderDate }}</td>
+                    </tr>
+                    {{ end }}
+                </table>
+            {{ else }}
+                <p>No orders found.</p>
+            {{ end }}
+        </section>
+
+        <section>
+            <h2>Products</h2>
+            {{ if .Products }}
+                <table border="1">
+                    <tr><th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>In Stock</th></tr>
+                    {{ range .Products }}
+                    <tr>
+                        <td>{{ .ID }}</td>
+                        <td>{{ .Name }}</td>
+                        <td>{{ .Description }}</td>
+                        <td>{{ printf "%.2f" .Price }}</td>
+                        <td>{{ .InStock }}</td>
+                    </tr>
+                    {{ end }}
+                </table>
+            {{ else }}
+                <p>No products found.</p>
+            {{ end }}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Go Webstore. All rights reserved.</p>
+    </footer>
+</body>
+</html>

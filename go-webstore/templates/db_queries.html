@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Queries</title>
+    <link rel="stylesheet" href="/assets/styles/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Database Queries</h1>
+    </header>
+
+    <section>
+        <h2>Customers</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Customers}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.FirstName}}</td>
+                    <td>{{.LastName}}</td>
+                    <td>{{.Email}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Products</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>In Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Products}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Description}}</td>
+                    <td>{{.Price}}</td>
+                    <td>{{.InStock}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Orders</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer ID</th>
+                    <th>Product ID</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Tax</th>
+                    <th>Donation</th>
+                    <th>Total</th>
+                    <th>Order Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Orders}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.CustomerID}}</td>
+                    <td>{{.ProductID}}</td>
+                    <td>{{.Quantity}}</td>
+                    <td>{{.Price}}</td>
+                    <td>{{.Tax}}</td>
+                    <td>{{.Donation}}</td>
+                    <td>{{.Total}}</td>
+                    <td>{{.OrderDate}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </section>
+
+    <footer>
+        <p>© 2024 Go Webstore</p>
+    </footer>
+</body>
+</html>

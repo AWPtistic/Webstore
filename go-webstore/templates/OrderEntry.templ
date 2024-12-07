@@ -1,0 +1,128 @@
+package templates
+
+templ OrderEntryPage() {
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Order Entry</title>
+        <link rel="stylesheet" href="assets/styles/styles.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+    </head>
+    <body>
+        <header>
+            <h1>Order Entry Form</h1>
+        </header>
+        <div class="container">
+            <main style="display: flex; gap: 20px;">
+                <section>
+                    <form action="/purchase" method="POST" id="orderEntryForm">
+                        <fieldset>
+                            <legend>Personal Info</legend>
+                            <label for="firstName">First Name*</label>
+                            <input type="text" id="firstName" name="firstName" required onkeyup="showCustomerSuggestions(this.value, 'first')">
+                            <label for="lastName">Last Name*</label>
+                            <input type="text" id="lastName" name="lastName" required onkeyup="showCustomerSuggestions(this.value, 'last')">
+                            <label for="email">Email*</label>
+                            <input type="email" id="email" name="email" required>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Product Info</legend>
+                            <label for="product">Select a product*</label>
+                            <select id="product" name="product" required onchange="showQuantity()">
+                                <option value="" disabled selected>-- What can your wallet handle? --</option>
+                                <option value="Family Friendly">Family Friendly</option>
+                                <option value="Pure Sport">Pure Sport</option>
+                                <option value="Budget Pick">Budget Pick</option>
+                            </select>
+                            <label for="available">Available:</label>
+                            <input type="text" id="available" readonly>
+                            <label for="quantity">Quantity*</label>
+                            <input type="number" id="quantity" name="quantity" min="1" max="1000" required>
+                        </fieldset>
+
+                        <button type="submit">Purchase</button>
+                        <button type="reset" style="background-color: red; color: white;">Clear Fields</button>
+                    </form>
+                </section>
+
+                <aside>
+                    <h3>Choose an existing customer:</h3>
+                    <table border="1" id="customerTable">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody">
+                            <!-- Customer suggestions will be populated here -->
+                        </tbody>
+                    </table>
+                </aside>
+            </main>
+            <div id="orderConfirmation"></div> <!-- Element to display confirmation message -->
+        </div>
+        <script>
+            function showQuantity() {
+                var product = document.getElementById('product').value;
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("available").value = this.responseText;
+                    }
+                };
+                xmlhttp.open("GET", "/get_product_quantity?product=" + encodeURIComponent(product), true);
+                xmlhttp.send();
+            }
+
+            function showCustomerSuggestions(query, field) {
+                if (query.trim().length === 0) {
+                    document.getElementById("customerTableBody").innerHTML = "";
+                    return;
+                }
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    document.getElementById("customerTableBody").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET", "/get_customers?name=" + encodeURIComponent(query) + "&field=" + encodeURIComponent(field), true);
+            xmlhttp.send();
+        }
+
+            document.getElementById("customerTable").addEventListener("click", function(e) {
+                if (e.target && e.target.nodeName === "TD") {
+                    var row = e.target.parentNode;
+                    document.getElementById("firstName").value = row.cells[0].innerText;
+                    document.getElementById("lastName").value = row.cells[1].innerText;
+                    document.getElementById("email").value = row.cells[2].innerText;
+                }
+            });
+
+            // jQuery for AJAX form submission
+            $(document).ready(function() {
+                $("#orderEntryForm").submit(function(e) {
+                    e.preventDefault(); // Prevent default form submission
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/purchase",
+                        data: $(this).serialize(), // Serialize form data
+                        success: function(response) {
+                            $("#orderConfirmation").html(response); // Display the confirmation message
+                            $("#customerTableBody").html(""); // Clear the customer table
+                            $("#orderEntryForm")[0].reset(); // Clear the form fields
+                        },
+                        error: function() {
+                            alert("Error submitting the form. Please try again.");
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+    </html>
+}

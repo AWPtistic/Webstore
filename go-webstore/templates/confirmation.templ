@@ -1,0 +1,35 @@
+package templates
+
+import "fmt"
+
+templ ConfirmationPage(firstName string, lastName string, email string, product string, quantity int, subtotal float64, tax float64, total float64) {
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<title>Order Confirmation</title>
+		<link rel="stylesheet" href="assets/styles/styles.css">
+	</head>
+	<body>
+		<header>
+			<h1>Order Confirmation</h1>
+		</header>
+		<div class="container">
+			<h2>Thank you for your purchase, {firstName} {lastName}!</h2>
+			<p>A confirmation has been sent to: {email}</p>
+			<h3>Order Details</h3>
+			<p>Product: {product}</p>
+			<p>Quantity: {fmt.Sprintf("%d", quantity)}</p>
+			<p>Subtotal: ${fmt.Sprintf("%.2f", subtotal)}</p>
+			<p>Tax: ${fmt.Sprintf("%.2f", tax)}</p>
+			<h3>Total: ${fmt.Sprintf("%.2f", total)}</h3>
+		</div>
+
+		
+
+	</body>
+	<footer>
+			<p>Contact us: support@michaelsFIREEEErides.com | Phone: 1-800-EXOTIC-CARS</p>
+			<p>&copy; 2024 Michael's Exotic Rides. All rights reserved.</p>
+		</footer>
+	</html>
+}
